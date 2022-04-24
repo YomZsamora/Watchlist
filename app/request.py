@@ -1,6 +1,6 @@
 from app import app # import the app instance
 import urllib.request, json # import the Python urllib.request module that will help us create a connection to our API URL
-from .models import movie
+from .models import movie # import movie from our models package
 Movie = movie.Movie
 
 api_key = app.config['MOVIE_API_KEY'] # Getting api key
@@ -53,5 +53,40 @@ def process_results(movie_list):
     
     return movie_results # return the list with movie objects.
 
+def get_movie(id):
+    get_movie_details_url =  base_url.format(id, api_key) # # We use the .format() method on the base_url and pass in the movie id and the api_key. 
 
+    with urllib.request.urlopen(get_movie_details_url) as url:
+        movie_details_data = url.read()
+        movie_details_response = json.loads(movie_details_data)
+
+        movie_object = None
+
+        if movie_details_response:
+            # using the get() method and pass in the keys so that we can access the values.
+            id = movie_details_response.get('id')
+            title = movie_details_response.get('original_title')
+            overview = movie_details_response.get('overview')
+            poster = movie_details_response.get('poster_path')
+            vote_average = movie_details_response.get('vote_average')
+            vote_count = movie_details_response.get('vote_count')
+
+            movie_object = Movie(id, title, overview, poster, vote_average, vote_count) # Creates the movie object
+
+        return movie_object
+
+def search_movie(movie_name):
+    search_movie_url = 'https://api.themoviedb.org/3/search/movie?api_key={}&query={}'.format(api_key, movie_name) # new URL for our search request
+
+    with urllib.request.urlopen(search_movie_url) as url:
+        search_movie_data = url.read()
+        search_movie_response = json.loads(search_movie_data)
+
+        search_movie_results = None
+
+        if search_movie_response['results']:
+            search_movie_list = search_movie_response['results']
+            search_movie_results = process_results(search_movie_list)
+
+        return search_movie_results
 

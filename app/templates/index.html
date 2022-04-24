@@ -1,20 +1,33 @@
 {% extends 'base.html' %}
 {% import 'macros.html' as macro %}
 
+<!-- Styles block -->
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}" />
+{% endblock %}
+
 {% block content %}
-    <!-- Popular movie -->
-    <h3> Popular Movies</h3>
-    <ul>
-        {{ macro.displayMovieList(popular)}}
-    </ul>
-    <!-- Upcoming movie  -->
-    <h3> Upcoming Movies </h3>
-    <ul>
-        {{ macro.displayMovieList(upcoming)}}
-    </ul>
-    <!-- Now showing movie -->
-    <h3>Now Showing</h3>
-    <ul>
-        {{ macro.displayMovieList(now_showing)}}
-    </ul>
+    <div class="container">
+        <form>
+            <input type="text" name="movie_query" placeholder="Search for a movie.." class="form-control" >
+            <input type="submit" value="Submit" class="btn btn-default" />
+        </form>
+
+        <!-- Popular movie -->
+        <h3> Popular Movies</h3>
+        <div class="row">
+            {{ macro.displayMovieList(popular)}}
+        </div>
+        <!-- Upcoming movie  -->
+        <h3> Upcoming Movies </h3>
+        <div class="row">
+            {{ macro.displayMovieList(upcoming)}}
+        </div>
+        <!-- Now showing movie -->
+        <h3>Now Showing</h3>
+        <div class="row">
+            {{ macro.displayMovieList(now_showing)}}
+        </div>
+    </div>
 {% endblock %}

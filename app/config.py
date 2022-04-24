@@ -4,7 +4,7 @@ class Config:
     '''
     General configuration parent class
     '''
-    pass
+    MOVIE_API_BASE_URL = 'https://api.themoviedb.org/3/movie/{}?api_key={}'
 
 
 # ProdConfig subclass contains configurations that are used in production stages of our application and inherits from the parent Config class.

@@ -1,10 +1,10 @@
 from app import app # import the app instance
 import urllib.request, json # import the Python urllib.request module that will help us create a connection to our API URL
-from models import movie
+from .models import movie
 Movie = movie.Movie
 
 api_key = app.config['MOVIE_API_KEY'] # Getting api key
-base_url = app.config['MOVIE_BASE_URL'] # Getting the movie base url
+base_url = app.config['MOVIE_API_BASE_URL'] # Getting the movie base url
 
 def get_movies(category):
     '''

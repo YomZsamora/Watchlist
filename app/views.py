@@ -2,6 +2,10 @@ from flask import render_template, request, redirect, url_for # import the rende
 from app import app # import the app instance from the app folder.
 from .request import get_movies, get_movie, search_movie #  import the get_movies(), get_movie() & search_movie() functions from the request module.
 
+from .models import reviews # Import the Review class from our models folder.
+from .forms import ReviewForm # import the ReviewForm class from our forms file.
+Reviews = reviews.Reviews
+
 @app.route('/')
 def index():
     '''
@@ -27,7 +31,8 @@ def movie(id):
     '''
     movie = get_movie(id) # Call our get_movies() function and pass in a movie id as an argument. 
     title = f'{movie.title}' # Use movie's title as page title.
-    return render_template('movie.html', title = title, movie = movie)
+    reviews = Reviews.get_reviews(movie.id)
+    return render_template('movie.html', title = title, movie = movie, reviews = reviews)
 
 @app.route('/search/<movie_name>')
 def search(movie_name):
@@ -39,3 +44,19 @@ def search(movie_name):
     searched_movies = search_movie(movie_name_format)
     title = f'search results for {movie_name}'
     return render_template('search.html', title=title, movies=searched_movies)
+
+@app.route('/movie/review/new/<int:id>', methods = ['GET','POST'])
+def new_review(id):
+    form = ReviewForm() # create an instance of the ReviewForm class
+    movie = get_movie(id) # call the get_movie and pass in the ID to get the movie object for the movie with that ID.
+
+    if form.validate_on_submit(): # validate_on_submit() method returns True when the form is submitted and all the data has been verified by the validators.
+        title = form.title.data
+        review = form.review.data
+    
+        new_review = Reviews(movie.id, title, movie.poster, review)
+        new_review.save_review()
+        return redirect(url_for('movie', id=movie.id))
+
+    title = f'{movie.title} review'
+    return render_template('new_review.html',title = title, review_form=form, movie=movie)

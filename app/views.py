@@ -22,7 +22,8 @@ def index():
     if search_movie:
         # redirect function that redirects us to another view function.
         return redirect(url_for('search', movie_name = search_movie))  # url_for function that passes in the search view function together with the dynamic movie_name
-    return render_template('index.html', title = title, popular = popular_movies, upcoming = upcoming_movies, now_showing = now_showing_movies) # searches for the template file in our app/templates/ sub directory and loads it.
+    
+    return render_template('index.html', title = title, popular = popular_movies, upcoming = upcoming_movies, now_showing = now_showing_movies) # searches for a template file in our app/templates/ sub directory and loads it.
 
 @app.route('/movie/<int:id>') # Angle brackets <> is dynamic. And any route mapped to this will be passed.
 def movie(id):

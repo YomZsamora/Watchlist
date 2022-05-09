@@ -1,13 +1,23 @@
 from flask import Flask # import the Flask class from flask module
-from .config import DevConfig
+from config import config_options
 from flask_bootstrap import Bootstrap 
 
-app = Flask(__name__, instance_relative_config = True) # Initializing application. instance_relative_config which allow us to connect to the instance/folder
+bootstrap = Bootstrap()
 
-app.config.from_object(DevConfig) # Setting up configuration
-app.config.from_pyfile('config.py') # connects to the config.py file and all its contents are appended to the app.config
+def create_app(config_name):
 
-bootstrap = Bootstrap(app) # Initializing Bootstrap Extensions
+    app = Flask(__name__) # Initializing application. instance_relative_config which allow us to connect to the instance/folder
 
-from app import views # import our views file from the app folder. This will allow us to create views.
-from app import errors
+    app.config.from_object(config_options[config_name]) # Setting up configuration
+
+    bootstrap.init_app(app) # Initializing Bootstrap Extensions
+    
+    # Registering the blueprint
+    from .main import main as main_blueprint #  import the Blueprint instance
+    app.register_blueprint(main_blueprint) # call the register_blueprint() method on the application instance and pass in the blueprint.
+    
+    # setting config
+    from .request import configure_request # Import the configure_request() function from the request.py file.
+    configure_request(app)
+
+    return app 

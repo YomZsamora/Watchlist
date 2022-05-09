@@ -1,10 +1,15 @@
 from app import app # import the app instance
 import urllib.request, json # import the Python urllib.request module that will help us create a connection to our API URL
-from .models import movie # import movie from our models package
-Movie = movie.Movie
+from .models import Movie # import movie from our models package
 
-api_key = app.config['MOVIE_API_KEY'] # Getting api key
-base_url = app.config['MOVIE_API_BASE_URL'] # Getting the movie base url
+api_key = None
+base_url = None 
+
+# Takes in the application instance and replaces the values of the None variables to application configuration objects.
+def configure_request(app):
+    global api_key, base_url
+    api_key = app.config['MOVIE_API_KEY']
+    base_url = app.config['MOVIE_API_BASE_URL']
 
 def get_movies(category):
     '''

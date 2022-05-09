@@ -2,9 +2,9 @@ from flask import render_template, request, redirect, url_for # import the rende
 from . import main # import the app instance from the app folder.
 from ..request import get_movies, get_movie, search_movie #  import the get_movies(), get_movie() & search_movie() functions from the request module.
 
-from ..models import reviews # Import the Review class from our models folder.
+from ..models import Reviews # Import the Review class from our models folder.
 from .forms import ReviewForm # import the ReviewForm class from our forms file.
-Reviews = reviews.Reviews
+
 
 @main.route('/')
 def index():

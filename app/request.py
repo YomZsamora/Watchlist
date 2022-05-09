@@ -1,4 +1,3 @@
-from app import app # import the app instance
 import urllib.request, json # import the Python urllib.request module that will help us create a connection to our API URL
 from .models import Movie # import movie from our models package
 
